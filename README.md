@@ -10,3 +10,4 @@
 projeto-1-simulador-pnae/Projeto 1 - Tabela de Dados.xlsx
 
 #### Projeto 2 - Painel de Censo Escolar
+projeto-2-painel-censo
