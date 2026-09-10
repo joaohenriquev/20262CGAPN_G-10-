@@ -11,4 +11,4 @@ projeto-1-simulador-pnae/Projeto 1 - Tabela de Dados.xlsx
 https://github.com/joaohenriquev/20262CGAPN_G-10-/blob/2b32f5446fc13214912ae54ae70221f17c44bd83/projeto-1-simulador-pnae/Projeto%201%20-%20Tabela%20de%20Dados.xlsx 
 
 #### Projeto 2 - Painel de Censo Escolar
-projeto-2-painel-censo
+projeto-2-painel-censo https://github.com/joaohenriquev/20262CGAPN_G-10-/tree/c7580b51461412aa7c5f89be77823f6996c5bd02/projeto-2-painel-censo
