@@ -13,6 +13,7 @@ Use o campo "Fator de ajuste" para ver matrículas e repasse mudarem em tempo re
 Na seção de cenários, clique em "Calcular próximo cenário" para reconstruir, passo a passo, a mesma Tabela de Dados da planilha (variação de −20% a +20%).
 
 Uso de Inteligência Artificial
+
 Ferramenta utilizada: Claude (Anthropic), modelo Sonnet, no aplicativo web claude.ai.
 Para que foi usada: gerar o artefato HTML interativo do simulador (simulador_pnae.html) a partir do modelo já construído em Excel, reproduzindo fielmente os dados, faixas de classificação e fórmulas da planilha (SOMA, PROCV, SOMARPRODUTO, SE aninhado com E/OU e o fator de ajuste da Tabela de Dados) em uma interface web com campos editáveis e um mecanismo de avanço passo a passo pelos cenários.
 
@@ -32,10 +33,15 @@ Estrutura:
 
 Coluna/variável	O que significa
 Modalidade (Parametros_PNAE)	Etapa/modalidade de ensino atendida pelo PNAE
+
 Valor per capita (R$/dia)	Valor repassado por aluno/dia naquela modalidade
+
 Dias letivos (ano)	Número de dias letivos usados no cálculo do repasse anual (200)
+
 Matrículas (mínimo) / Porte	Faixas usadas para classificar a escola como Pequena, Média ou Grande
+
 Matrículas (Simulador_Escola)	Número de alunos matriculados por modalidade na escola simulada
+
 Fator de Ajuste	Percentual de variação aplicado às matrículas para simular cenários de crescimento/queda
 
 Participação do Grupo
@@ -43,5 +49,7 @@ O que aprendemos com este projeto: aprendemos a estruturar um modelo de cálculo
 
 Papel de cada integrante:
 João Henrique Viana: estruturou o modelo no Excel (abas Parametros_PNAE e Simulador_Escola), definiu as fórmulas de cálculo do repasse, da classificação de porte e da regra de elegibilidade, e conduziu a geração e a conferência do artefato HTML interativo com apoio de IA.
+
 Gustavo Del Gilgio: levantou e organizou os parâmetros oficiais do PNAE (valores per capita e regras da Resolução CD/FNDE nº 1/2026), e ajudou a validar se os resultados do simulador batiam com os valores calculados manualmente.
+
 João Vitor Arantes: construiu a Tabela de Dados (What-If Analysis) com os cenários de variação do fator de ajuste, testou o simulador HTML em diferentes combinações de matrículas e revisou a redação final do README.
