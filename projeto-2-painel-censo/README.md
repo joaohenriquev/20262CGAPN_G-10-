@@ -53,5 +53,7 @@ O que aprendemos com este projeto: aprendemos a trabalhar com uma base de microd
 
 Papel de cada integrante:
 João Henrique Viana: organizou a base de microdados do Censo Escolar 2024, definiu quais indicadores de água, esgoto, energia e lixo seriam analisados, e conduziu a geração das tabelas dinâmicas com apoio de IA, incluindo a conferência final dos totais.
+
 Gustavo Del Gilgio: pesquisou a documentação oficial do Censo Escolar e do dicionário de variáveis do INEP, ajudou a interpretar os códigos das colunas categóricas na aba Parâmetros e revisou se as classificações (ex.: porte da escola) estavam de acordo com a metodologia oficial.
+
 João Vitor Arantes: testou as quatro tabelas dinâmicas com diferentes cruzamentos (ex.: água por dependência administrativa), validou se os números batiam com contagens manuais em uma amostra da base, e redigiu a documentação final do projeto.
