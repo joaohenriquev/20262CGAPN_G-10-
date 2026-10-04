@@ -1,0 +1,107 @@
+Option Explicit
+
+' ============================================================
+' Projeto 1 - Simulador de Repasse do PNAE
+' Automacao: registra cada simulacao na aba Banco_de_Dados
+' ENDERECOS FIXOS (nao inserir linhas/colunas acima deles!):
+'   C25 = Racional da Taxa    C26 = Fator de Ajuste
+'   F25 = Usuario (campo criado pelo grupo)
+'   C35 = Total de matriculas ajustadas   D35 = Repasse ajustado
+' ============================================================
+
+Private Const ABA_SIM As String = "Simulador_Escola"
+Private Const ABA_BD As String = "Banco_de_Dados"
+Private Const CEL_RACIONAL As String = "C25"
+Private Const CEL_FATOR As String = "C26"
+Private Const CEL_USUARIO As String = "F25"   ' TAREFA DO GRUPO - passo 1: campo Usuario criado na tela
+
+' Macro ligada ao botao da planilha
+Public Sub RegistrarSimulacao()
+    Dim wsSim As Worksheet, wsBD As Worksheet
+    Dim taxa As Variant
+    Dim racional As String
+    Dim usuario As String                          ' TAREFA DO GRUPO - passo 2: variavel usuario
+    Dim msgErro As String
+    Dim proxLinha As Long
+    Dim resp As VbMsgBoxResult
+
+    Set wsSim = ThisWorkbook.Worksheets(ABA_SIM)
+    Set wsBD = ThisWorkbook.Worksheets(ABA_BD)
+
+    ' --- leitura dos campos da tela ---
+    taxa = wsSim.Range(CEL_FATOR).Value
+    racional = Trim$(CStr(wsSim.Range(CEL_RACIONAL).Value))
+    usuario = Trim$(CStr(wsSim.Range(CEL_USUARIO).Value))   ' TAREFA DO GRUPO - passo 2: leitura do Usuario
+
+    ' --- validacao ---
+    msgErro = ValidarSimulacao(taxa, racional, usuario)
+    If msgErro <> "" Then
+        MsgBox msgErro, vbExclamation, "Simula" & ChrW(231) & ChrW(227) & "o n" & ChrW(227) & "o registrada"
+        Exit Sub
+    End If
+
+    ' --- desafio extra (opcional): aviso se o fator estiver fora da faixa usual ---
+    If taxa < -0.5 Or taxa > 0.5 Then
+        resp = MsgBox("O Fator de Ajuste (" & Format(taxa, "0%") & ") est" & ChrW(225) & " fora da faixa usual (-50% a +50%)." & vbCrLf & _
+                      "Deseja registrar mesmo assim?", vbYesNo + vbQuestion, "Aviso")
+        If resp = vbNo Then Exit Sub
+    End If
+
+    ' --- gravacao na proxima linha livre do Banco_de_Dados ---
+    proxLinha = wsBD.Cells(wsBD.Rows.Count, 1).End(xlUp).Row + 1
+    If proxLinha < 2 Then proxLinha = 2
+
+    wsBD.Cells(proxLinha, 1).Value = proxLinha - 1                       ' A: ID
+    wsBD.Cells(proxLinha, 2).Value = Now                                 ' B: Data/Hora
+    wsBD.Cells(proxLinha, 2).NumberFormat = "dd/mm/yyyy hh:mm"
+    wsBD.Cells(proxLinha, 3).Value = taxa                                ' C: Fator de Ajuste
+    wsBD.Cells(proxLinha, 3).NumberFormat = "0%"
+    wsBD.Cells(proxLinha, 4).Value = racional                            ' D: Racional da Taxa
+    wsBD.Cells(proxLinha, 5).Value = wsSim.Range("C35").Value            ' E: Total de Matriculas Ajustadas
+    wsBD.Cells(proxLinha, 6).Value = wsSim.Range("D35").Value            ' F: Repasse Ajustado
+    wsBD.Cells(proxLinha, 6).NumberFormat = """R$"" #,##0.00"
+    wsBD.Cells(proxLinha, 7).Value = usuario                             ' G: Usuario  (TAREFA DO GRUPO - passo 4)
+
+    LimparCampos wsSim
+
+    MsgBox "Simula" & ChrW(231) & ChrW(227) & "o n" & ChrW(186) & " " & (proxLinha - 1) & " registrada com sucesso!", vbInformation, "Banco de Dados"
+End Sub
+
+' Devolve "" se esta tudo certo, ou a mensagem de erro
+Private Function ValidarSimulacao(ByVal taxa As Variant, ByVal racional As String, ByVal usuario As String) As String
+    ValidarSimulacao = ""
+
+    If IsError(taxa) Then
+        ValidarSimulacao = "O Fator de Ajuste (C26) cont" & ChrW(233) & "m um erro. Corrija o valor."
+        Exit Function
+    End If
+    If IsEmpty(taxa) Or Trim$(CStr(taxa)) = "" Then
+        ValidarSimulacao = "Preencha o Fator de Ajuste (C26). Se n" & ChrW(227) & "o houver ajuste, digite 0."
+        Exit Function
+    End If
+    If Not IsNumeric(taxa) Then
+        ValidarSimulacao = "O Fator de Ajuste (C26) precisa ser um n" & ChrW(250) & "mero (ex.: -5% ou 0,10)."
+        Exit Function
+    End If
+    If CDbl(taxa) <= -1 Then
+        ValidarSimulacao = "O Fator de Ajuste n" & ChrW(227) & "o pode ser -100% ou menos."
+        Exit Function
+    End If
+    If Len(racional) = 0 Then
+        ValidarSimulacao = "Preencha o Racional da Taxa (C25): explique por que escolheu esse fator."
+        Exit Function
+    End If
+
+    ' TAREFA DO GRUPO - passo 3: validar o campo Usuario
+    If Len(usuario) = 0 Then
+        ValidarSimulacao = "Preencha o campo Usu" & ChrW(225) & "rio (F25) com o seu nome."
+        Exit Function
+    End If
+End Function
+
+' Limpa os campos para a proxima simulacao
+Private Sub LimparCampos(ByVal wsSim As Worksheet)
+    wsSim.Range(CEL_FATOR).ClearContents
+    wsSim.Range(CEL_RACIONAL).ClearContents
+    wsSim.Range(CEL_USUARIO).ClearContents        ' TAREFA DO GRUPO - passo 4: limpar o Usuario
+End Sub
