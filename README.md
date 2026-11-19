@@ -14,5 +14,5 @@ https://github.com/joaohenriquev/20262CGAPN_G-10-/blob/2b32f5446fc13214912ae54ae
 projeto-2-painel-censo https://github.com/joaohenriquev/20262CGAPN_G-10-/tree/c7580b51461412aa7c5f89be77823f6996c5bd02/projeto-2-painel-censo
 
 #### Projeto 3 — Simulador de Repasse do PNAE em Python
-
+https://github.com/joaohenriquev/20262CGAPN_G-10-/blob/main/projeto-3-simulador-pnae-python/simulador_pnae-2.py
 
