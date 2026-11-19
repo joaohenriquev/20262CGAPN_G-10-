@@ -14,7 +14,7 @@ https://github.com/joaohenriquev/20262CGAPN_G-10-/blob/2b32f5446fc13214912ae54ae
 projeto-2-painel-censo https://github.com/joaohenriquev/20262CGAPN_G-10-/tree/c7580b51461412aa7c5f89be77823f6996c5bd02/projeto-2-painel-censo
 
 #### Projeto 3 — Simulador de Repasse do PNAE em Python
-projeto-3-simulador-pnae-python https://github.com/joaohenriquev/20262CGAPN_G-10-/blob/main/projeto-3-simulador-pnae-python/simulador_pnae-2.py
+projeto-3-simulador-pnae-python https://github.com/joaohenriquev/20262CGAPN_G-10-/blob/c5516a6aaf154db112221b1c38f704fac6f0ae09/projeto-3-simulador-pnae-python/Projeto%203
 
 #### Projeto 4 — Painel Interativo do Censo Escolar em Python
 projeto-4-painel-censo-python https://github.com/joaohenriquev/20262CGAPN_G-10-/blob/bc3f07ebead084520833b1f4049d8c6912f51779/projeto-4-painel-censo-python/Projeto%204
