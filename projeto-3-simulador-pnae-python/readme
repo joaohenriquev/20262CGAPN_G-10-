@@ -1,1 +1,121 @@
-
+Projeto 3 — Simulador de Repasse do PNAE em Python
+Objetivo: o simulador calcula quanto uma escola pública recebe por ano do Programa Nacional de Alimentação Escolar (PNAE), separando creche, pré-escola e ensino fundamental, e classifica o porte da escola. Ele também estima quanto custam por ano os alimentos das refeições dessa escola e mostra que parte desse custo o repasse federal consegue cobrir. Pode ser usado para simular o repasse de qualquer escola e para discutir se o valor federal é suficiente.
+Como usar
+O que é preciso ter instalado: Python 3 (qualquer versão a partir da 3.6). Não é preciso instalar nenhuma biblioteca.
+Como rodar: abra o terminal na pasta deste projeto e digite:
+python simulador_pnae.py
+(no Mac, pode ser preciso usar python3 simulador_pnae.py)
+Perguntas que o programa faz:
+Pergunta	O que digitar
+Digite o seu nome	Texto livre
+Digite o nome da sua escola	Texto livre
+Qual a quantidade de dias letivos do ano	Número inteiro (ex.: 200)
+Digite as matrículas na creche	Número inteiro (0 se a escola não tiver creche)
+Digite as matrículas na pré-escola	Número inteiro (0 se não tiver)
+Digite as matrículas no fundamental	Número inteiro (0 se não tiver)
+Se o usuário digitar algo que não seja um número inteiro (letras, vírgula, número negativo), o programa avisa e pergunta de novo.
+Teste de conferência com o Projeto 1: com 200 dias letivos, 60 alunos de creche, 80 de pré-escola e 50 de fundamental (EMEB Vila Quitaúna, escola fictícia do Projeto 1), o simulador devolve repasse anual total de R$ 37.660,00 e porte Pequena, igual ao Projeto 1.
+Prints do resultado
+Simulador rodando com a Escola Municipal dos Remédios (Recife/PE):
+Simulador com a escola real
+Teste de conferência com os dados do Projeto 1:
+Teste com a EMEB Vila Quitaúna
+Escola simulada
+Campo	Valor
+Nome	Escola Municipal dos Remédios
+Código INEP	26119145
+Município / UF	Recife / PE
+Dependência administrativa	Municipal (TP_DEPENDENCIA = 3)
+Situação de funcionamento	Em atividade (TP_SITUACAO_FUNCIONAMENTO = 1)
+Localização	Urbana, bairro do Prado
+Matrículas na creche	0
+Matrículas na pré-escola	33
+Matrículas no ensino fundamental	314
+Total	347 (igual a QT_MAT_BAS, já que a escola não tem ensino médio nem EJA)
+Como encontramos os dados:
+Usamos a base do Censo Escolar 2024 em Excel disponibilizada no curso (Censo_2024_Excel.xlsx, a mesma do Projeto 2), aba Microdados, que tem uma linha por escola. As abas Dependencia e Situacao traduzem os códigos dessas variáveis.
+Filtramos SG_UF = PE e NO_MUNICIPIO = Recife (1.235 escolas), depois TP_DEPENDENCIA = 3 (municipal) e TP_SITUACAO_FUNCIONAMENTO = 1 (ativa), o que deixou 334 escolas.
+Escolhemos a Escola Municipal dos Remédios (NO_ENTIDADE) e conferimos o código INEP 26119145 (CO_ENTIDADE).
+Para o ensino fundamental usamos QT_MAT_FUND = 314.
+A base do curso não separa creche e pré-escola: a variável QT_MAT_INF traz o total da educação infantil (33). Para separar, olhamos as matrículas por idade: a escola tem 0 alunos de 0 a 3 anos (QT_MAT_BAS_0_3 = 0), ou seja, não tem creche. Por isso as 33 matrículas da educação infantil foram lançadas como pré-escola, e o simulador recebeu 0 para creche.
+Rodamos o simulador com 200 dias letivos, creche 0, pré-escola 33 e fundamental 314.
+Custo dos alimentos
+Item	Informação
+Valor adotado	R$ 3,60 por refeição
+Fonte	Resumo "Análise dos gastos reais x repasse de verbas para a alimentação escolar de duas escolas estaduais do interior do estado de São Paulo"
+Link	https://static.even3.com/anais/1072522.pdf
+Data da informação	Gastos de agosto a novembro de 2023
+Justificativa: o estudo mediu o gasto com matéria-prima (só os alimentos) a partir dos registros de entrada e saída de insumos de duas escolas públicas, e chegou a um custo médio de R$ 3,60 por refeição. Isso é exatamente o tipo de custo que a Lei nº 11.947/2009 permite pagar com o recurso do PNAE. Ficam de fora merendeiras, gás, equipamentos e estrutura da cozinha, que são pagos por estados e municípios. Por isso o valor é comparável ao repasse federal. Usamos esse valor como parâmetro fixo no topo do programa (CUSTO_ALIMENTOS_REFEICAO = 3.60).
+Ressalvas sobre a comparabilidade:
+Outro município e outra rede: os dados são de escolas estaduais do interior de São Paulo, e não da escola escolhida. O preço dos alimentos varia entre regiões, então o custo real da nossa escola pode ser maior ou menor.
+Outro ano: os dados são de 2023, e os preços dos alimentos subiram desde então. Por isso o custo de 2026 provavelmente é maior, e a cobertura calculada pelo simulador tende a ser otimista.
+Outra etapa: as escolas estaduais paulistas atendem principalmente ensino fundamental II e médio, e o estudo considerou almoço e jantar. Refeições de creche costumam ser diferentes (mais refeições por dia e cardápio específico), então o custo para crianças pequenas pode ser diferente.
+Como comparação, um estudo publicado em 2025 nos Cadernos de Saúde Pública encontrou custo mediano de alimentos de R$ 4,50 por aluno por dia de refeição no ensino fundamental municipal de Morro da Fumaça (SC), com dados de 2021 (https://pmc.ncbi.nlm.nih.gov/articles/PMC12448751/). Os dois valores estão na mesma faixa, o que reforça que R$ 3,60 é uma estimativa razoável e até conservadora.
+Resultados e reflexão
+Resultados para a Escola Municipal dos Remédios (Recife/PE), com 200 dias letivos:
+Resultado	Valor
+Porte da escola	Média (347 matrículas)
+Repasse creche	R$ 0,00
+Repasse pré-escola	R$ 5.412,00
+Repasse ensino fundamental	R$ 35.796,00
+Repasse anual total do PNAE	R$ 41.208,00
+Custo anual estimado dos alimentos	R$ 249.840,00
+Cobertura do repasse federal	16,5%
+Diferença a ser coberta por outras fontes	R$ 208.632,00
+A cobertura da escola real (16,5%) é bem menor que a do teste do Projeto 1 (27,5%). O motivo é a composição das matrículas: a Escola dos Remédios atende quase só ensino fundamental, que recebe o menor valor per capita (R$ 0,57), e não tem creche, que recebe o maior (R$ 1,57). Como o custo dos alimentos por refeição é o mesmo em todas as etapas no simulador, quanto mais fundamental, menor a cobertura. Em outras palavras, de cada R$ 3,60 de comida no prato, a União paga cerca de R$ 0,59, e a Prefeitura do Recife precisaria completar cerca de R$ 600 por aluno por ano.
+Reflexão:
+O resultado mostra que o repasse federal sozinho não paga a comida dos alunos. O PNAE foi desenhado para ser suplementar: a União repassa um valor por aluno, e estados e municípios devem completar com recursos próprios. O problema é que essa complementação nem sempre acontece. Segundo o Observatório da Alimentação Escolar, mais de 30% dos municípios do Norte e do Nordeste disseram em 2022 que não conseguiam complementar o repasse, e em muitos lugares o dinheiro federal é a única garantia da merenda. A nota técnica do Todos Pela Educação mostra que, em 2018, o PNAE respondia por pelo menos 90% dos recursos da alimentação escolar em 46% dos municípios.
+Quando a diferença não é coberta, a escola precisa servir a mesma quantidade de refeições com bem menos dinheiro. Na prática, isso pode significar porções menores, cardápios mais repetitivos, menos frutas, verduras e carnes, e mais produtos industrializados, que são mais baratos. Esse risco é maior porque os valores per capita perderam poder de compra ao longo do tempo: segundo o Observatório, desde 2010 a perda chega a 47,4%, já que houve só quatro reajustes, todos abaixo da inflação dos alimentos. A nota técnica do Todos Pela Educação mostra que, entre 2012 e 2022, os valores do fundamental e do médio subiram cerca de 20%, enquanto a cesta básica nas capitais subiu 154%.
+Isso também entra em conflito com as novas regras do programa. A partir de 2026, pelo menos 85% dos recursos devem ir para alimentos in natura ou minimamente processados, e 45% para a agricultura familiar. Segundo o Brasil de Fato, esses alimentos costumam ser mais caros, e quase metade dos nutricionistas ouvidos pelo estudo disse que as condições atuais não bastam para oferecer uma alimentação adequada. Sem reajuste, metas mais exigentes ficam difíceis de cumprir justamente onde o município não tem dinheiro para complementar.
+Por fim, o efeito é desigual. O repasse por aluno é o mesmo em uma capital rica e em um município pequeno do semiárido, mas a capacidade de complementar é muito diferente. Para muitos alunos, a merenda é a principal refeição do dia, e a insegurança alimentar grave em lares com crianças menores de 10 anos dobrou entre 2020 e 2022, de 9% para 18%. As leituras defendem duas saídas: um reajuste anual automático pela inflação dos alimentos e uma ponderação que dê mais recursos às redes com alunos mais pobres.
+Simplificações do simulador:
+As matrículas são do Censo Escolar 2024, mas os valores per capita são de 2026 (Resolução CD/FNDE nº 1/2026).
+O cálculo considera só três etapas (creche, pré-escola e fundamental). Ficam de fora ensino médio, EJA, tempo integral, AEE e escolas indígenas e quilombolas, que têm valores próprios.
+A estimativa supõe uma refeição por aluno por dia letivo. Escolas de tempo integral e creches servem mais de uma refeição por dia, então o custo real seria maior.
+O custo dos alimentos é uma única referência, de outro lugar e de outro ano (ver ressalvas acima).
+Organização do programa
+O arquivo simulador_pnae.py está dividido em três partes: parâmetros no topo (valores per capita, limites de porte e custo dos alimentos), funções no meio e programa principal no final, que conversa com o usuário.
+Função	O que faz	Correspondência no simulador do Projeto 1 (Excel)
+ler_numero	Pede um número ao usuário e repete a pergunta até receber um número inteiro válido	Células de entrada (dias letivos e matrículas) com validação de dados
+calcular_repasse	Multiplica matrículas × valor per capita × dias letivos de uma etapa	Fórmulas de repasse por etapa (creche, pré-escola e fundamental)
+classificar_porte	Classifica a escola como Micro, Pequena ou Média pelo total de matrículas	Fórmula SE de classificação de porte
+calcular_custo_alimentos	Calcula o custo anual dos alimentos: total de alunos × dias letivos × custo por refeição	Sem correspondência (novo no Projeto 3)
+calcular_cobertura	Calcula a cobertura do repasse (%) e a diferença a ser coberta; com um if, zera a diferença quando o repasse cobre o custo	Sem correspondência (novo no Projeto 3)
+formatar_reais	Mostra os valores no formato R$ 37.660,00	Formatação de células como moeda
+Uso de Inteligência Artificial
+Ferramenta utilizada: Claude (Anthropic)
+Para que foi usada: para conferir se o código feito em aula seguia as orientações do projeto, renomear as funções para os nomes pedidos, criar a função de cobertura, pesquisar referências de custo dos alimentos e montar um rascunho deste README.
+Exemplo de prompt utilizado: enviamos o arquivo .py feito na Aula 18 junto com o documento de orientações do Projeto 3 e pedimos: "Pode também já montar tudo do README".
+O que foi ajustado manualmente: a escola real foi escolhida e filtrada pelo grupo na base do Censo Escolar 2024, e os dados foram digitados no simulador por nós. Conferimos o limite de porte com o Excel do Projeto 1, rodamos o programa para checar o resultado de R$ 37.660,00 e o caso em que o repasse cobre o custo, e conferimos os números do README com os prints do terminal. Também revisamos a reflexão e as ressalvas sobre a fonte do custo dos alimentos.
+Fonte de Dados
+Fontes oficiais: Censo Escolar 2024 (INEP) e Resolução CD/FNDE nº 1/2026
+Links oficiais:
+Microdados do Censo Escolar (INEP): https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-escolar
+Resolução CD/FNDE nº 1, de 18 de fevereiro de 2026 (DOU): https://www.in.gov.br/en/web/dou/-/resolucao-cd/fnde-n-1-de-18-de-fevereiro-de-2026-687612532
+PDF da resolução no site do FNDE: https://www.gov.br/fnde/pt-br/acesso-a-informacao/legislacao/resolucoes/2026/resolucao-cd_fnde-no-1-de-18-de-fevereiro-de-2026-dou-imprensa-nacional.pdf
+Valores per capita usados no simulador (por aluno, por dia letivo): creche R$ 1,57, pré-escola R$ 0,82 e ensino fundamental R$ 0,57.
+O que os dados representam: o Censo Escolar é o levantamento anual do INEP com todas as escolas de educação básica do país, com informações sobre cada escola e suas matrículas por etapa. A Resolução do FNDE define quanto a União repassa por aluno, por dia letivo, em cada etapa de ensino. Juntos, permitem calcular o repasse do PNAE de uma escola real.
+Estrutura (variáveis do Censo usadas):
+Variável	Significado
+NO_ENTIDADE	Nome da escola
+CO_ENTIDADE	Código INEP da escola
+NO_MUNICIPIO	Município
+SG_UF	Sigla da UF
+TP_DEPENDENCIA	Dependência administrativa (1 = federal, 2 = estadual, 3 = municipal, 4 = privada)
+TP_SITUACAO_FUNCIONAMENTO	Situação de funcionamento (1 = ativa, 2 = inativa)
+QT_MAT_BAS	Total de matrículas na educação básica
+QT_MAT_INF	Matrículas na educação infantil (creche + pré-escola)
+QT_MAT_FUND	Matrículas no ensino fundamental
+QT_MAT_BAS_0_3	Matrículas de alunos de 0 a 3 anos (usada para verificar se a escola tem creche)
+QT_MAT_BAS_4_5	Matrículas de alunos de 4 e 5 anos
+Custo dos alimentos: R$ 3,60 por refeição, do resumo "Análise dos gastos reais x repasse de verbas para a alimentação escolar de duas escolas estaduais do interior do estado de São Paulo" (https://static.even3.com/anais/1072522.pdf), com dados de agosto a novembro de 2023.
+Leituras de apoio:
+Todos Pela Educação. Nota técnica: cenários para a recomposição orçamentária e o fortalecimento do PNAE. Março de 2023. https://todospelaeducacao.org.br/wordpress/wp-content/uploads/2023/03/nota-pnae-reajuste-nos-valores-do-programa-nacional-de-alimentacao-escolar.pdf
+Observatório da Alimentação Escolar. Apesar de ousadas novas metas, ausência de reajuste ameaça a alimentação escolar. 21/10/2025. https://alimentacaoescolar.org.br/noticias/2025/10/21/apesar-de-ousadas-novas-metas-ausencia-de-reajuste-ameaca-a-alimentacao-escolar/
+Brasil de Fato. Alimentação escolar: Brasil ainda enfrenta desafio do financiamento, diz estudo. 16/10/2025. https://www.brasildefato.com.br/podcast/bem-viver/2025/10/16/alimentacao-escolar-brasil-ainda-enfrenta-desafio-do-financiamento-diz-estudo/
+Participação do Grupo
+O que aprendemos com este projeto: aprendemos a transformar a lógica de uma planilha em um programa organizado em parâmetros, funções e programa principal, e a validar o que o usuário digita. Também aprendemos a localizar uma escola específica nos microdados do Censo Escolar usando o dicionário de dados. O principal aprendizado, porém, foi sobre a política: com o custo dos alimentos estimado, ficou claro que o repasse federal cobre só uma parte da merenda, e que a qualidade da alimentação dos alunos depende muito da capacidade de cada município ou estado de complementar esse valor.
+Papel de cada integrante:
+João Henrique Viana: consolidou a versão final do simulador a partir dos arquivos da Aula 18, programou as funções de custo e cobertura e testou o programa nos casos de conferência.
+Gustavo Del Gilgio: escolheu a escola real, localizou as variáveis no dicionário de dados e fez o filtro na base do Censo Escolar 2024; também gerou os prints do terminal.
+João Vitor Arantes: pesquisou a referência de custo dos alimentos por refeição, leu os textos de apoio e redigiu a reflexão; organizou a pasta no GitHub e o README.
